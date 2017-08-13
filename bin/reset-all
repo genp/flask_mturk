@@ -1,0 +1,21 @@
+#!/bin/sh
+export DB_NAME='mturk'
+killall psql
+killall run.py
+
+if [ ! -z "$PGHOST" -a "$PGHOST" != localhost ]; then
+   echo "Remove this check in reset-all if you really mean it on $PGHOST"
+   exit 1
+fi
+
+if [ ! -x ./bin/db_create.py ]; then
+   echo "Run this from the top of the repo"
+   exit 1
+fi
+
+dropdb $DB_NAME && createdb $DB_NAME || exit 1
+
+
+rm -rf db_repository
+./bin/db_create.py
+

@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <script src="static/jquery.min.js"></script>
+        <title>Control panel</title>
+    </head>
+    <h1>Control panel</h1>
+    <table>
+        <tr>
+            <td>Number of words per round:</td>
+            <td>
+                <input type="text" size="10" value="5" id="num_words">
+            </td>
+            <td>(number of choices shown each round)</td>
+        </tr>
+        <tr>
+            <td>Multiplicity:</td>
+            <td>
+                <input type="text" size="10" value="3" id="multiplicity">
+            </td>
+            <td>(min) number of times each word is replicated</td>
+        </tr>
+        <tr>
+            <td>Number of rounds:</td>
+            <td>
+                <input type="text" size="10" id="num_rounds" value="2"/>
+            </td>
+            <td>how many words to show in each experiment</td>
+        </tr>
+        <tr>
+            <td>Random seed:</td>
+            <td>
+                <input type="text" size="10" id="rand_seed" value="17"/>
+            </td>
+            <td>use to randomize word selection</td>
+        </tr>
+        <tr>
+            <td>Filename with words:</td>
+            <td>
+                <input type="text" size="10" id="filename" value="test_words.txt">
+            </td>
+            <td>should be in /data path</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>
+                <input type="button" value="Start comparisons" onclick="start_comparisons();">
+            </td>
+        </tr>
+    </table>
+    <br/>
+    <input type="button" onclick="send_server('_clear_log')" value="Clear log"/>
+
+    <br/>
+    <br />Results filename: 
+    <input type="text" size="10" id="results_filename" value="test_results.txt" />
+    <input type="button" value="Save results" onclick="save_results();">
+            </td>
+        </tr>
+    </table>
+
+
+</body><script>
+    function send_server(req_name, data) {
+        json = {data: JSON.stringify(data)}
+        $.getJSON('/' + req_name, json, function(res_data) {
+            console.log("Got back data:");
+            console.log(res_data);
+        });
+
+    }
+
+    function start_comparisons() {
+        data = {};
+        ["num_rounds", "rand_seed", "num_words", "multiplicity", "filename"].forEach(function(k) {
+            data[k] = $("#" + k).val();
+        });
+        send_server("_start_comparisons", data);
+    }
+
+    function save_results() {
+        send_server("_save_results", {fname: $("#results_filename").val()})        
+    }
+</script>
+</html>

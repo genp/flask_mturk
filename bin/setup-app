@@ -1,0 +1,18 @@
+#!/bin/sh
+export APP_NAME='flask_mturk'
+export DB_NAME='mturk'
+
+mkvirtualenv $APP_NAME
+cd $APP_NAME
+setvirtualenvproject $APP_NAME
+ln -sf `pwd`/bin/postactivate ~/.virtualenvs/$APP_NAME/bin
+ln -sf `pwd`/bin/postdeactivate ~/.virtualenvs/$APP_NAME/bin
+pip install --upgrade pip
+pip install -r pip-freeze.txt
+add2virtualenv .
+source $VIRTUAL_ENV/bin/postactivate
+
+# sudo su postgres 
+# createuser -sdr $DB_USER 
+create_db $DB_NAME
+exit

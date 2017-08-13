@@ -99,3 +99,16 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# emacs
+*~
+
+# logs
+logs/*
+
+# configuration and account details
+config.py
+#*
+*#
+.#*
+.DS_Store
